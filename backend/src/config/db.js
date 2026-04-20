@@ -8,10 +8,12 @@ const sleep = (ms) =>
   });
 
 const getMongoUri = () => {
+  if (process.env.MONGO_URI) return process.env.MONGO_URI;
   if (process.env.MONGODB_URI) return process.env.MONGODB_URI;
 
   const fallbackUri = 'mongodb://127.0.0.1:27017/room_pg_booking';
   console.warn(
+    `MONGO_URI is not set. Falling back to default local Mongo URI: ${fallbackUri}`
     `MONGODB_URI is not set. Falling back to default local Mongo URI: ${fallbackUri}`
   );
   return fallbackUri;

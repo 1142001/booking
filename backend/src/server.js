@@ -30,6 +30,7 @@ app.use((req, res, next) => {
   if (!isDatabaseConnected()) {
     return res.status(503).json({
       message:
+        'Database is currently unavailable. Start MongoDB locally, run `docker compose up -d mongo`, or configure MONGO_URI.'
         'Database is currently unavailable. Start MongoDB locally, run `docker compose up -d mongo`, or configure MONGODB_URI.'
     });
   }

@@ -38,6 +38,24 @@ booking/
 
 ## Setup Instructions
 
+### 0) Start MongoDB (Required)
+
+Choose one option:
+
+#### Option A: Docker (recommended)
+
+```bash
+docker compose up -d mongo
+```
+
+#### Option B: Local MongoDB service
+
+Start your local MongoDB service so it listens on `127.0.0.1:27017`.
+
+#### Option C: MongoDB Atlas
+
+Use Atlas connection string in `backend/.env`.
+
 ### 1) Backend
 
 ```bash
@@ -72,6 +90,7 @@ VITE_API_BASE_URL=http://localhost:5000/api
 
 ### Environment variables
 
+- `MONGO_URI` is optional for local development.
 - `MONGODB_URI` is optional for local development.
 - If not provided, backend uses default: `mongodb://127.0.0.1:27017/room_pg_booking`.
 - Add `backend/.env` only when you want custom DB URL, JWT config, or different port.
@@ -84,6 +103,7 @@ If you see:
 DB connection failed: connect ECONNREFUSED 127.0.0.1:27017
 ```
 
+it means MongoDB is not running at that address. Run `docker compose up -d mongo` (from project root) or set `MONGO_URI` in `backend/.env` to a valid MongoDB server (if omitted, app uses `mongodb://127.0.0.1:27017/room_pg_booking`).
 it means MongoDB is not running at that address. Run `docker compose up -d mongo` (from project root) or set `MONGODB_URI` in `backend/.env` to a valid MongoDB server (if omitted, app uses `mongodb://127.0.0.1:27017/room_pg_booking`).
 
 
