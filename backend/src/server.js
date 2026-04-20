@@ -40,7 +40,7 @@ const start = async () => {
     console.error('Troubleshooting:');
     console.error('1) Ensure MongoDB is running locally on 127.0.0.1:27017 OR');
     console.error('2) Start MongoDB via Docker: docker compose up -d mongo OR');
-    console.error('3) Use MongoDB Atlas and update MONGODB_URI in backend/.env');
+    console.error('3) Use MongoDB Atlas and set MONGODB_URI in backend/.env (optional if using local default)');
     console.error(`Original error: ${error.message}`);
     process.exit(1);
   }

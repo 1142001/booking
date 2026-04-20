@@ -60,7 +60,7 @@ Use Atlas connection string in `backend/.env`.
 
 ```bash
 cd backend
-cp .env.example .env
+cp .env.example .env   # optional for local default Mongo
 npm install
 npm run seed   # optional: insert demo properties
 npm run dev
@@ -86,6 +86,13 @@ If backend runs on different URL, set:
 VITE_API_BASE_URL=http://localhost:5000/api
 ```
 
+
+### Environment variables
+
+- `MONGODB_URI` is optional for local development.
+- If not provided, backend uses default: `mongodb://127.0.0.1:27017/room_pg_booking`.
+- Add `backend/.env` only when you want custom DB URL, JWT config, or different port.
+
 ## Common Error Fix
 
 If you see:
@@ -94,7 +101,7 @@ If you see:
 DB connection failed: connect ECONNREFUSED 127.0.0.1:27017
 ```
 
-it means MongoDB is not running at that address. Run `docker compose up -d mongo` (from project root) or update `MONGODB_URI` in `backend/.env` to a valid MongoDB server.
+it means MongoDB is not running at that address. Run `docker compose up -d mongo` (from project root) or set `MONGODB_URI` in `backend/.env` to a valid MongoDB server (if omitted, app uses `mongodb://127.0.0.1:27017/room_pg_booking`).
 
 ## API Overview
 
