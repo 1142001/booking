@@ -103,6 +103,14 @@ DB connection failed: connect ECONNREFUSED 127.0.0.1:27017
 
 it means MongoDB is not running at that address. Run `docker compose up -d mongo` (from project root) or set `MONGODB_URI` in `backend/.env` to a valid MongoDB server (if omitted, app uses `mongodb://127.0.0.1:27017/room_pg_booking`).
 
+
+## Runtime behavior when MongoDB is down
+
+- Backend now **starts without crashing** even if MongoDB is unavailable.
+- `GET /api/health` will return `database: "disconnected"`.
+- Other API routes return HTTP `503` with a clear message until DB is connected.
+- Backend retries MongoDB connection automatically every 10 seconds in background.
+
 ## API Overview
 
 - `POST /api/auth/register`

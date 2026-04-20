@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
-import { connectDB } from './config/db.js';
+import { connectDB, isDatabaseConnected } from './config/db.js';
 import authRoutes from './routes/authRoutes.js';
 import propertyRoutes from './routes/propertyRoutes.js';
 import bookingRoutes from './routes/bookingRoutes.js';
@@ -16,7 +16,24 @@ app.use(express.json());
 app.use(morgan('dev'));
 
 app.get('/api/health', (_req, res) => {
-  res.status(200).json({ status: 'ok', service: 'room-pg-booking-api' });
+  res.status(200).json({
+    status: 'ok',
+    service: 'room-pg-booking-api',
+    database: isDatabaseConnected() ? 'connected' : 'disconnected'
+  });
+});
+
+app.use((req, res, next) => {
+  if (req.path === '/api/health') return next();
+
+  if (!isDatabaseConnected()) {
+    return res.status(503).json({
+      message:
+        'Database is currently unavailable. Start MongoDB locally, run `docker compose up -d mongo`, or configure MONGODB_URI.'
+    });
+  }
+
+  return next();
 });
 
 app.use('/api/auth', authRoutes);
@@ -29,21 +46,27 @@ app.use((req, res) => {
 
 const PORT = process.env.PORT || 5000;
 
-const start = async () => {
-  try {
-    await connectDB();
-    app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
-    });
-  } catch (error) {
-    console.error('❌ Could not connect to MongoDB.');
-    console.error('Troubleshooting:');
-    console.error('1) Ensure MongoDB is running locally on 127.0.0.1:27017 OR');
-    console.error('2) Start MongoDB via Docker: docker compose up -d mongo OR');
-    console.error('3) Use MongoDB Atlas and set MONGODB_URI in backend/.env (optional if using local default)');
-    console.error(`Original error: ${error.message}`);
-    process.exit(1);
+const bootstrapDatabase = async () => {
+  const connected = await connectDB();
+
+  if (!connected) {
+    console.warn('⚠️ Server is running without database connection.');
+    console.warn('It will retry in the background every 10 seconds.');
   }
+
+  setInterval(async () => {
+    if (!isDatabaseConnected()) {
+      await connectDB({ retries: 1, retryDelayMs: 500 });
+    }
+  }, 10000);
+};
+
+const start = async () => {
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+
+  await bootstrapDatabase();
 };
 
 start();
