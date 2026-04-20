@@ -3,7 +3,6 @@ import cors from 'cors';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
 import { connectDB, isDatabaseConnected } from './config/db.js';
-import { connectDB } from './config/db.js';
 import authRoutes from './routes/authRoutes.js';
 import propertyRoutes from './routes/propertyRoutes.js';
 import bookingRoutes from './routes/bookingRoutes.js';
@@ -16,6 +15,7 @@ app.use(cors());
 app.use(express.json());
 app.use(morgan('dev'));
 
+// Health route
 app.get('/api/health', (_req, res) => {
   res.status(200).json({
     status: 'ok',
@@ -24,37 +24,38 @@ app.get('/api/health', (_req, res) => {
   });
 });
 
+// DB check middleware
 app.use((req, res, next) => {
   if (req.path === '/api/health') return next();
 
   if (!isDatabaseConnected()) {
     return res.status(503).json({
       message:
-        'Database is currently unavailable. Start MongoDB locally, run `docker compose up -d mongo`, or configure MONGO_URI.'
-        'Database is currently unavailable. Start MongoDB locally, run `docker compose up -d mongo`, or configure MONGODB_URI.'
+        'Database is unavailable. Start MongoDB or set MONGO_URI / MONGODB_URI.'
     });
   }
 
-  return next();
-  res.status(200).json({ status: 'ok', service: 'room-pg-booking-api' });
+  next();
 });
 
+// Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/properties', propertyRoutes);
 app.use('/api/bookings', bookingRoutes);
 
+// 404 handler
 app.use((req, res) => {
   res.status(404).json({ message: `Route not found: ${req.originalUrl}` });
 });
 
 const PORT = process.env.PORT || 5000;
 
+// DB bootstrap
 const bootstrapDatabase = async () => {
   const connected = await connectDB();
 
   if (!connected) {
-    console.warn('⚠️ Server is running without database connection.');
-    console.warn('It will retry in the background every 10 seconds.');
+    console.warn('⚠️ Running without DB. Retrying every 10s...');
   }
 
   setInterval(async () => {
@@ -64,6 +65,7 @@ const bootstrapDatabase = async () => {
   }, 10000);
 };
 
+// Start server
 const start = async () => {
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
@@ -73,8 +75,3 @@ const start = async () => {
 };
 
 start();
-connectDB().then(() => {
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-  });
-});
