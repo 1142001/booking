@@ -38,29 +38,12 @@ booking/
 
 ## Setup Instructions
 
-### 0) Start MongoDB (Required)
-
-Choose one option:
-
-#### Option A: Docker (recommended)
-
-```bash
-docker compose up -d mongo
-```
-
-#### Option B: Local MongoDB service
-
-Start your local MongoDB service so it listens on `127.0.0.1:27017`.
-
-#### Option C: MongoDB Atlas
-
-Use Atlas connection string in `backend/.env`.
-
 ### 1) Backend
 
 ```bash
 cd backend
 cp .env.example .env   # optional for local default Mongo
+cp .env.example .env
 npm install
 npm run seed   # optional: insert demo properties
 npm run dev

@@ -3,6 +3,7 @@ import cors from 'cors';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
 import { connectDB, isDatabaseConnected } from './config/db.js';
+import { connectDB } from './config/db.js';
 import authRoutes from './routes/authRoutes.js';
 import propertyRoutes from './routes/propertyRoutes.js';
 import bookingRoutes from './routes/bookingRoutes.js';
@@ -34,6 +35,7 @@ app.use((req, res, next) => {
   }
 
   return next();
+  res.status(200).json({ status: 'ok', service: 'room-pg-booking-api' });
 });
 
 app.use('/api/auth', authRoutes);
@@ -70,3 +72,8 @@ const start = async () => {
 };
 
 start();
+connectDB().then(() => {
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+});

@@ -44,4 +44,12 @@ export const connectDB = async ({ retries = 5, retryDelayMs = 2000 } = {}) => {
 
   console.error(`MongoDB not connected after retries: ${lastError.message}`);
   return false;
+export const connectDB = async () => {
+  try {
+    const conn = await mongoose.connect(process.env.MONGODB_URI);
+    console.log(`MongoDB connected: ${conn.connection.host}`);
+  } catch (error) {
+    console.error(`DB connection failed: ${error.message}`);
+    process.exit(1);
+  }
 };
