@@ -1,0 +1,59 @@
+{
+    "mdb.presetConnections": [
+        {
+            "name": "Preset Connection",
+            "connectionString": "mongodb://localhost:27017"
+        }
+    ],
+    "dbcode.connections": [
+        {
+            "connectionId": "ArXNDCDSYJHwk-ifeJC06",
+            "name": "Store",
+            "driver": "mongodb",
+            "color": "#FCCCD1",
+            "connectionType": "host",
+            "driverOptions": {
+                "protocol": "mongodb+srv://"
+            },
+            "host": "localhost",
+            "port": 27017,
+            "ssl": false,
+            "authMethod": "password",
+            "username": "siddheshwari",
+            "password": "",
+            "savePassword": "secretStorage",
+            "database": "stay",
+            "readOnly": false,
+            "role": "development",
+            "connectionTimeout": 30,
+            "introspection": {
+                "progressive": false
+            }
+        },
+        {
+            "connectionId": "pdTM-VgOBuRIQaRYLVDF0",
+            "name": "Store",
+            "driver": "mongodb",
+            "color": "#FCCCD1",
+            "connectionType": "host",
+            "driverOptions": {
+                "protocol": "mongodb+srv://"
+            },
+            "host": "localhost",
+            "port": 27017,
+            "ssl": false,
+            "authMethod": "password",
+            "username": "siddheshwari",
+            "password": "",
+            "savePassword": "secretStorage",
+            "tunnelId": "shtQmAHSke5rQiSJhi65Z",
+            "database": "stay",
+            "readOnly": false,
+            "role": "development",
+            "connectionTimeout": 30,
+            "introspection": {
+                "progressive": false
+            }
+        }
+    ]
+}
