@@ -17,7 +17,8 @@ const getMongoUri = () => {
   return fallbackUri;
 };
 
-export const isDatabaseConnected = () => mongoose.connection.readyState === 1;
+export const isDatabaseConnected = () =>
+  mongoose.connection.readyState === 1;
 
 export const connectDB = async ({ retries = 5, retryDelayMs = 2000 } = {}) => {
   if (isDatabaseConnected()) return true;
@@ -25,7 +26,7 @@ export const connectDB = async ({ retries = 5, retryDelayMs = 2000 } = {}) => {
   let lastError;
   const mongoUri = getMongoUri();
 
-  for (let attempt = 1; attempt <= retries; attempt += 1) {
+  for (let attempt = 1; attempt <= retries; attempt++) {
     try {
       const conn = await mongoose.connect(mongoUri);
       console.log(`MongoDB connected: ${conn.connection.host}`);
@@ -44,12 +45,4 @@ export const connectDB = async ({ retries = 5, retryDelayMs = 2000 } = {}) => {
 
   console.error(`MongoDB not connected after retries: ${lastError.message}`);
   return false;
-export const connectDB = async () => {
-  try {
-    const conn = await mongoose.connect(process.env.MONGODB_URI);
-    console.log(`MongoDB connected: ${conn.connection.host}`);
-  } catch (error) {
-    console.error(`DB connection failed: ${error.message}`);
-    process.exit(1);
-  }
 };
