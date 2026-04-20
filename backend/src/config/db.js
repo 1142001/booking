@@ -9,7 +9,7 @@ const getMongoUri = () => {
   if (process.env.MONGO_URI) return process.env.MONGO_URI;
   if (process.env.MONGODB_URI) return process.env.MONGODB_URI;
 
-  const fallbackUri = 'mongodb+srv://siddheshwari:Siddhi%40123@localhost/stay?connectTimeoutMS=30000';
+  const fallbackUri = 'MONGODB_URI=mongodb+srv://siddheshwari:Siddhi%40123@cluster0.xxxxx.mongodb.net/stay';
 
   console.warn(
     `⚠️ No MONGO_URI or MONGODB_URI set. Using fallback: ${fallbackUri}`
