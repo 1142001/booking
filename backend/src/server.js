@@ -48,7 +48,7 @@ app.use((req, res) => {
   res.status(404).json({ message: `Route not found: ${req.originalUrl}` });
 });
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 // DB bootstrap
 const bootstrapDatabase = async () => {
